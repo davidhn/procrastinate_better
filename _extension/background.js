@@ -13,33 +13,17 @@ console.log("THIS IS THE BACKGROUND!");
 var init_storage = {
 	procrastinate_better: {
 		pb_status: 'on',
-		saved_sites: [
-			{
-				favicon:"",
-				pageUrl:"chrome://extensions/",
-				title:"Extensions"
-			},
-			{
-				favicon:"",
-				pageUrl:"chrome://extensions/",
-				title:"Extensions"
-			},
-			{
-				favicon:"",
-				pageUrl:"chrome://extensions/",
-				title:"Extensions"
-			},
-		]
+		saved_sites: new Array()
 	}
 }
 
 // seeding the plugin with previously stored data
-chrome.storage.sync.set(init_storage, function() {
-	// get chrome storage object
-	chrome.storage.sync.get( null, function(result) {
-		console.log(result.procrastinate_better);
-	})
-});	
+// chrome.storage.sync.set(init_storage, function() {
+// 	// get chrome storage object
+// 	chrome.storage.sync.get( null, function(result) {
+// 		console.log(result.procrastinate_better);
+// 	})
+// });	
 
 chrome.runtime.onInstalled.addListener(function() {
   chrome.contextMenus.create({
@@ -51,6 +35,8 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
+    console.log(info);
+    console.log(tab);
 
 
 	chrome.storage.sync.get('procrastinate_better', function(result) {

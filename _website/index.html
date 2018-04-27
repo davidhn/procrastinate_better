@@ -27,40 +27,31 @@
 <style>
 
 	body {
-		background: #141E30;  /* fallback for old browsers */
-		background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
-		background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-		color: white;
-		/*font-family: Helvetica;*/
-		background: #ad5389;  /* fallback for old browsers */
-		background: -webkit-linear-gradient(to right, #3c1053, #ad5389);  /* Chrome 10-25, Safari 5.1-6 */
-		background: linear-gradient(to right, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+		padding-bottom: 64px;
+		background: #141E30;
+		background: -webkit-linear-gradient(to right, #243B55, #141E30);
+		background: linear-gradient(to right, #243B55, #141E30); 
+/*		background: #ad5389; 
+		background: -webkit-linear-gradient(to right, #3c1053, #ad5389); 
+		background: linear-gradient(to right, #3c1053, #ad5389); */
 	}
-	.title {
-		text-align: center;
-		margin-top: 48px;
-		/*font-weight: 100;*/
-		color: grey;
+	h1 {
+		color: white;	
 	}
 	.headline {
 		font-weight: 100;
-		margin-top: 48px;
+		margin: 2rem 0;
 		text-align: center;
 	}
 	.ted-text {
 		color: rgba(230, 43, 30, 1);
 	}
 	.vid-div {
-		margin-top: 48px;
+		margin-bottom: 24px;
 	}
 	.vid-title {
-		font-weight: 100;
 		margin-top: 6px;
 		padding-right: 24px;
-	}
-	.container {
-		margin-bottom: 120px;
 	}
 
 
@@ -68,21 +59,37 @@
 
 <body>
 
-	<nav class="navbar fixed-bottom navbar-dark indigo justify-content-between">
+<!-- 	<nav class="navbar fixed-bottom navbar-dark indigo justify-content-between">
     	<a class="navbar-brand" href="#">Procrastinate Better</a>
         <a class="btn btn-mdb-color" id="fb-button" role="button">PROCRASTINATE ON FACEBOOK</a>
 	</nav>
+ -->
+	<div class='container header-container' >
+		<div class="row" style='margin-top: 64px'>
+		    <div class="col">
+		    	<p style='color:grey'>PROCRASTINATE BETTER</p>
+		    	<h1 class="display-4">Instead of Facebook, how about...</h1>
+<!-- 		        <h2 class='headline'>Instead of <span>Facebook</span>, check out these <span class='ted-text'>TED</span> Talks.</h2> -->
+		    </div> 
+		</div>
+	</div>
 
 	<div class="container">
 
-	  	<div class="row">
-		    <div class="col">
-		        <h2 class='headline'>Instead of <span>Facebook</span>, check out these <span class='ted-text'>TED</span> Talks.</h2>
-		    </div> 
+		<div class='row' style='margin-top: 64px;'>
+			<div class='col'>
+				<h1>Catching Up</h1>
+				<div class="list-group list-group-flush"></div>
+			</div>
 		</div>
 
-		<!-- videos get appended here -->
-		<div class='row vid-container'></div>
+		<div class='row' style='margin-top: 64px;'>
+			<div class='col'>
+				<h1><span class='ted-text'>TED</span> Talks</h1>
+				<div class='row card-deck'></div>
+			</div>
+		</div>
+
 
 	</div>
 
@@ -128,20 +135,32 @@
 				playlistId: pid,
 			}).done(function(data) {
 				var vidList = shuffle(data.items);
-				var vidListLimited = vidList.slice(0,6);
-				console.log(data);
+				var vidListLimited = vidList.slice(0,4);
+				// console.log(data);
 				$.each(vidListLimited, function(i ,item) {
 					console.log(item);
 					var title = item.snippet.title;
 					var vidId = item.snippet.resourceId.videoId;
+					var thumbnail = item.snippet.thumbnails.high.url;
 					var output = `
-						<div class='col vid-div'>
-							<iframe width="${vidWidth}" height="${vidHeight}" src="https://www.youtube.com/embed/${vidId}?showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-							<h6 class='vid-title'>${title}</h6>
-						</div>
-
+					<div class="card mb-4">
+						<div class="view overlay">
+					    <img class="card-img-top" src="${thumbnail}" alt="Card image cap">
+					    <a href="#!">
+					      <div class="mask rgba-white-slight"></div>
+					    </a>
+					  </div>	
+				  	<div class="card-body">
+				    	<p class="card-title">${title}</p>
+				  	</div>
+					</div>
 					`;
-					$('.vid-container').append(output);
+					$('.card-deck').append(output);
+
+					// <div class='col vid-div'>
+					// 	<iframe width="${vidWidth}" height="${vidHeight}" src="https://www.youtube.com/embed/${vidId}?showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+					// 	<h6 class='vid-title'>${title}</h6>
+					// </div>
 				})
 			})
 		}
