@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Procrastinate Better",
+  "description": "This extension allows the user to procrastinate better.",
+  "version": "0.1",
+  "icons": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+   },
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Instead of Facebook, check out these TED talks"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "contextMenus"
+  ],
+  "background": {
+    "scripts": ["js/jquery-3.3.1.min.js", "background.js"]
+  },
+  "externally_connectable": {
+    "matches": ["*://*.procrastinatebetter.com/*"]
+  }
+}

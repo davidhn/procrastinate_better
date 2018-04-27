@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Bootstrap core CSS -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Material Design Bootstrap -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/css/mdb.min.css" rel="stylesheet">
+
+	<!-- JQuery -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.0/js/mdb.min.js"></script>
+
+	<title>Procrastinate Better</title>
+
+</head>
+
+<style>
+
+	body {
+		background: #141E30;  /* fallback for old browsers */
+		background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+		color: white;
+		/*font-family: Helvetica;*/
+		background: #ad5389;  /* fallback for old browsers */
+		background: -webkit-linear-gradient(to right, #3c1053, #ad5389);  /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to right, #3c1053, #ad5389); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+	}
+	.title {
+		text-align: center;
+		margin-top: 48px;
+		/*font-weight: 100;*/
+		color: grey;
+	}
+	.headline {
+		font-weight: 100;
+		margin-top: 48px;
+		text-align: center;
+	}
+	.ted-text {
+		color: rgba(230, 43, 30, 1);
+	}
+	.vid-div {
+		margin-top: 48px;
+	}
+	.vid-title {
+		font-weight: 100;
+		margin-top: 6px;
+		padding-right: 24px;
+	}
+	.container {
+		margin-bottom: 120px;
+	}
+
+
+</style>
+
+<body>
+
+	<nav class="navbar fixed-bottom navbar-dark indigo justify-content-between">
+    	<a class="navbar-brand" href="#">Procrastinate Better</a>
+        <a class="btn btn-mdb-color" id="fb-button" role="button">PROCRASTINATE ON FACEBOOK</a>
+	</nav>
+
+	<div class="container">
+
+	  	<div class="row">
+		    <div class="col">
+		        <h2 class='headline'>Instead of <span>Facebook</span>, check out these <span class='ted-text'>TED</span> Talks.</h2>
+		    </div> 
+		</div>
+
+		<!-- videos get appended here -->
+		<div class='row vid-container'></div>
+
+	</div>
+
+	<!-- 	click on "go to facebook" 
+			add flag to chrome storage that allows for facebook access
+			start 15 min timer
+			after 15 min
+			change flag to block facebook access
+			browser needs to redirect facebook tab to procrastinate better page
+
+	-->
+
+
+<script>
+
+	$(function() {
+
+		const API_KEY = 'AIzaSyCoMuQD92N0iRa1Z0N2W5uzIlpdXk72rCw';
+		const vidWidth = 325;
+		const vidHeight = 200;
+		const vidResults = 20;
+
+		console.log("READY!")
+
+		$.get('https://www.googleapis.com/youtube/v3/channels', {
+			key: API_KEY,
+			part: 'contentDetails',
+			forUsername: 'TEDtalksDirector',
+		}).done(function(data) {
+			console.log(data);
+			$.each(data.items, function(i,item) {
+				var pid = item.contentDetails.relatedPlaylists.uploads;
+				console.log(pid);
+				getVids(pid)
+			})
+		})
+
+		function getVids (pid) {
+			$.get('https://www.googleapis.com/youtube/v3/playlistItems', {
+				key: API_KEY,
+				part: 'snippet',
+				maxResults: vidResults,
+				playlistId: pid,
+			}).done(function(data) {
+				var vidList = shuffle(data.items);
+				var vidListLimited = vidList.slice(0,6);
+				console.log(data);
+				$.each(vidListLimited, function(i ,item) {
+					console.log(item);
+					var title = item.snippet.title;
+					var vidId = item.snippet.resourceId.videoId;
+					var output = `
+						<div class='col vid-div'>
+							<iframe width="${vidWidth}" height="${vidHeight}" src="https://www.youtube.com/embed/${vidId}?showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							<h6 class='vid-title'>${title}</h6>
+						</div>
+
+					`;
+					$('.vid-container').append(output);
+				})
+			})
+		}
+
+		function shuffle(array) {
+		  var currentIndex = array.length, temporaryValue, randomIndex;
+
+		  // While there remain elements to shuffle...
+		  while (0 !== currentIndex) {
+
+		    // Pick a remaining element...
+		    randomIndex = Math.floor(Math.random() * currentIndex);
+		    currentIndex -= 1;
+
+		    // And swap it with the current element.
+		    temporaryValue = array[currentIndex];
+		    array[currentIndex] = array[randomIndex];
+		    array[randomIndex] = temporaryValue;
+		  }
+
+		  return array;
+		}
+
+
+		$('#fb-button').on('click', function() {
+			chrome.storage.sync.get('procrastinate_better', function(result) {
+				console.log(result);
+			})
+			// chrome.storage.sync.set({ 'pb_status': 'off' }, function() {
+			// 	setTimeout(function() {
+			// 		alert('15 seconds have passed')
+			// 	}, 1500)
+		 //    });
+		 // Page context
+var message = {/* whatever */};
+var event = new CustomEvent("PassToBackground", {detail: 'this worked'});
+window.dispatchEvent(event);
+			window.open('https://facebook.com', '_self')
+		})
+
+	})
+
+</script>
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
