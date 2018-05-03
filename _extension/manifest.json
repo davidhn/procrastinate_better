@@ -11,10 +11,11 @@
   "content_scripts": [
     {
       "matches": [
-        "*://*.procrastinatebetter.com/*"
+        "*://*.procrastinatebetter.com/*",
+        "<all_urls>"
       ],
       "js": [
-        "js/jquery-3.3.1.min.js", "content.js"
+        "js/jquery-3.3.1.min.js", "js/bootstrap.min.js", "content.js"
       ]
     }
   ],
@@ -26,7 +27,8 @@
   "permissions": [
     "storage",
     "tabs",
-    "contextMenus"
+    "contextMenus",
+    "alarms"
   ],
   "background": {
     "scripts": ["js/jquery-3.3.1.min.js", "background.js"]

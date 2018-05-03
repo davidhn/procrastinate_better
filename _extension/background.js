@@ -1,11 +1,5 @@
 console.log("THIS IS THE BACKGROUND!");
 
-// if (jQuery) {  
-//     console.log('jquery loaded')
-// } else {
-//     console.log("jQuery not loaded")
-// }
-
 // chrome.storage.sync.clear();
 
 // should probably give users ability to destroy or save the sites
@@ -37,8 +31,6 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
     console.log(info);
     console.log(tab);
-
-
 	chrome.storage.sync.get('procrastinate_better', function(result) {
 
 		var pb = result.procrastinate_better.saved_sites,
@@ -54,10 +46,32 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 			console.log(result.procrastinate_better);
 		})
 	})
-
-
-
 })
+
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+
+    chrome.storage.sync.get('procrastinate_better', (items) => {
+        console.log(items.procrastinate_better.pb_status);
+
+        if (items.procrastinate_better.pb_status == "on" && changeInfo.status == "loading") {
+            var newUrl = tab.url;
+            console.log(newUrl);
+            if (newUrl.includes("facebook.com")) {
+                redirectToSite(tab)
+            }
+        } 
+    }); 
+
+    
+    // when popup value changes, update the chrome value
+
+});
+
+
+chrome.alarms.onAlarm.addListener(function( alarm ) {
+  console.log("Got an alarm!", alarm);
+});
 
 
 // chrome.tabs.query({'active': true}, function(tabs) {
@@ -131,7 +145,7 @@ function redirectToSite(tab, uriObj) {
         prev += encodeURIComponent(uriObj.domain());
     }
     chrome.tabs.update(tab.id, {
-        url: "https://www.procrastinatebetter.com/"
+        url: "https://procrastinatebetter.com/"
         // ?lang=" + locale + prev
     });
 }
@@ -147,26 +161,7 @@ chrome.runtime.onStartup.addListener(function () {
     buildBreakAlarms();
 });
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
-	chrome.storage.sync.get('pb_status', (items) => {
-    	console.log(items.pb_status);
-
-    	if (items.pb_status == "on" && changeInfo.status == "loading") {
-			var newUrl = tab.url;
-			console.log(newUrl);
-			if (newUrl.includes("facebook.com")) {
-				redirectToSite(tab)
-			}
-		} 
-  	});	
-
-	
-
-
-	// when popup value changes, update the chrome value
-
-});
 
 window.addEventListener("PassToBackground", function(evt) {
   chrome.runtime.sendMessage(evt.detail);

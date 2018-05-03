@@ -18,10 +18,14 @@ chrome.storage.sync.get('procrastinate_better', function(result) {
 		var output = `
 			<a href="${url}" class="list-group-item list-group-item-action waves-effect">
 				<img src="${icon}">
-				${title}
+				<span>${title}</span>
+	    		<i class='fa fa-close remove-saved-item'></i>
 			</a>
 		`;
 		$('.list-group').append(output);
 	})
 })
 
+$('.remove-saved-item').on('click', function() {
+	console.log($(this))
+})

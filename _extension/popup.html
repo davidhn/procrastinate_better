@@ -1,45 +1,85 @@
 <!doctype html>
-<!--
- This page is shown when the extension button is clicked, because the
- "browser_action" field in manifest.json contains the "default_popup" key with
- value "popup.html".
- -->
+
 <html>
   <head>
     <title>Getting Started Extension's Popup</title>
     <script src="js/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+
 
     <style type="text/css">
       body {
-        margin: 16px;
         white-space: nowrap;
-        background-color: #4DB6AC;
       }
-
-      label {
+      .pop-header {
+        padding: 8px 36px 8px 12px;
+        background: #7b8eff;
+      }
+      .logo {
+        width: 20px;
+        position: absolute;
+        left: 9px;
+      }
+      .pop-header-text {
+        padding-left: 24px;
         color: white;
       }
-
-  
+      .pop-options {
+        padding: 8px 36px 8px 12px;
+        cursor: pointer;
+      }
+      .pop-options:hover {
+        background-color: #dcdcdc;
+      }
+      .pop-option-icon {
+        position: absolute;
+      }
+      .ion-pause.pop-option-icon {
+        left: 14px;
+      }
+      .pop-option-text {
+        padding-left: 24px;
+        font-size: .9rem;
+      }
+      #pb-pause-btn, #pb-activate-btn {
+        display:none;
+      }
     </style>
 
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-    -->
     <script src="popup.js"></script>
   </head>
 
   <body>
-    <div class="form-group">
-      <label>Would you like to Procrastinate Better?</label>
-      <select class="form-control" id="dropdown">
-        <option value="on">Yes</option>
-        <option value="off">No</option>
-      </select>
+
+    <div>
+      <div class='pop-header'><img class='logo' src='icon.png'> 
+        <div class='pop-header-text'>Procrastinate Better</div>
+      </div>
+      <div class='pop-options'>
+        <i class='ion-star pop-option-icon'></i>
+        <div class='pop-option-text'>Save current page for later</div>
+      </div>
+      <hr style='margin: 0'>
+      <div class='pop-options' id='pb-pause-btn'>
+        <i class='ion-pause pop-option-icon'></i>
+        <div class='pop-option-text' >Pause for 15 minutes</div>
+        <!-- <div>Paused For <span id='time-remaining'>15:00</span></div> -->
+      </div>
+      <div class='pop-options' id='pb-activate-btn'>
+        <i class='ion-play pop-option-icon'></i>
+        <div class='pop-option-text'>Turn on Procrastinate Better</div>
+      </div>
     </div>
+    <!-- <button id="toggleAlarm">Activate alarm</button> -->
+ 
+
+
+
+
+
+
+              
   </body>
 </html>
